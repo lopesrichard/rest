@@ -1,23 +1,7 @@
 <?php
 
-namespace App\Validator\Annotation;
+namespace App\Repository;
 
-use Cajudev\RestfulApi\Exception\BadRequestException;
-
-class ArrayOfIntsOrArraysValidator
+class Address extends \Cajudev\RestfulApi\Repository
 {
-    public function validate(string $property, $array)
-    {
-        if (!is_array($array)) {
-            throw new BadRequestException("Parâmetro [$property] informado é inválido.");
-        }
-
-        foreach ($array as $key => $value) {
-            if (!is_int($value) && !is_array($value)) {
-                throw new BadRequestException("Parâmetro [$property] contém valores inválidos.");
-            }
-        }
-
-        return $array;
-    }
 }
