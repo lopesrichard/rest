@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class $Entity extends \Cajudev\RestfulApi\Entity
 {
     /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
-    private \$id = null;
+    private ?int \$id;
 
     public function toArray(): array
     {
@@ -70,7 +70,7 @@ use Cajudev\RestfulApi\Exception\BadRequestException;
 class $Validator extends \Cajudev\RestfulApi\Validator
 {
     /** @Validation(type="string") */
-    public \$property;
+    public string \$property;
 
     public function validateProperty()
     {
