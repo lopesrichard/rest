@@ -25,63 +25,24 @@ class Customer extends \Cajudev\RestfulApi\Entity
     /** @OneToMany(targetEntity="Address", mappedBy="customer", cascade={"persist"}, orphanRemoval=true) */
     private $addresses = null;
 
+    /** @ORM\Column(type="boolean") **/
+    private $active = true;
+
+    /** @ORM\Column(type="boolean") **/
+    private $excluded = false;
+
     public function __construct(array $params)
     {
         $this->addresses = new ArrayCollection();
         parent::__construct($params);
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName($name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(int $index)
-    {
-        return $this->addresses->get($index);
-    }
-    
-    public function getAddresses(): Collection
-    {
-        return $this->addresses;
-    }
-
-    public function addAddress(Address $address)
-    {
-        return $this->addresses->add($address->setCustomer($this));
-    }
-
-    public function setAddresses(Collection $addresses): self
-    {
-        $this->addresses->clear();
-
-        foreach ($addresses as $address) {
-            $this->addAddress($address);
-        }
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'addresses' => $this->getAddresses()->map(function ($address) {
-                return $address->toArray();
-            })->toArray(),
+            'id' => $this->id,
+            'name' => $this->name,
+            'addresses' => $this->addresses->map(fn ($address) => $address->toArray())->toArray(),
         ];
     }
 }

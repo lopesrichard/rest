@@ -1,10 +1,10 @@
 {
   "database": {
-    "driver": "",
-    "host": "",
-    "dbname": "",
-    "user": "",
-    "password": "",
-    "charset": ""
+    "driver": "pdo_mysql",
+    "host": "mysql.branvo.com",
+    "dbname": "branvo23",
+    "user": "branvo23",
+    "password": "4cc0untt3st",
+    "charset": "utf8"
   }
 }

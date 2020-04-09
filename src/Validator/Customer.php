@@ -14,7 +14,7 @@ class Customer extends \Cajudev\RestfulApi\Validator
     /** @Validation(type="string", params={ "maxlength":10 }) */
     public $name;
 
-    /** @Validation(type="arrayOfIntsOrArrays", params={ "maxlength":10 }) */
+    /** @Validation(type="arrayOfIntsOrArrays") */
     public $addresses;
 
     public function validateAddresses()

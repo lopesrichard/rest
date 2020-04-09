@@ -26,40 +26,17 @@ class Address extends \Cajudev\RestfulApi\Entity
      */
     private $customer;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+    /** @ORM\Column(type="boolean") **/
+    private $active = true;
 
-    public function getPostcode(): string
-    {
-        return $this->postcode;
-    }
-
-    public function setPostcode(string $postcode): self
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    public function getCustomer(): Customer
-    {
-        return $this->customer;
-    }
-
-    public function setCustomer(Customer $customer): self
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
+    /** @ORM\Column(type="boolean") **/
+    private $excluded = false;
+        
     public function toArray(): array
     {
         return [
-            'id' => $this->getId(),
-            'postcode' => $this->getPostcode(),
+            'id' => $this->id,
+            'postcode' => $this->postcode,
         ];
     }
 }
