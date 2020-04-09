@@ -1,0 +1,279 @@
+<?php
+
+$command = array_slice($argv, 1);
+
+function entity(string $Entity, string $entity)
+{
+    return <<<END
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="App\\Repository\\$Entity")
+ * @ORM\Table(name="$entity")
+ */
+class $Entity extends \Cajudev\RestfulApi\Entity
+{
+    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
+    private \$id = null;
+
+    public function toArray(): array
+    {
+        return [
+            'id' => \$this->id,
+        ];
+    }
+}
+END;
+}
+
+function repository(string $Repository)
+{
+    return <<<END
+<?php
+
+namespace App\Repository;
+
+class $Repository extends \Cajudev\RestfulApi\Repository
+{
+}    
+END;
+}
+
+function service(string $Service)
+{
+    return <<<END
+<?php
+
+namespace App\Services;
+
+class $Service extends \Cajudev\RestfulApi\Service
+{
+}     
+END;
+}
+
+function validator(string $Validator)
+{
+    return <<<END
+<?php
+
+namespace App\Validator;
+
+use Cajudev\RestfulApi\Validator;
+use Cajudev\RestfulApi\Annotation\Validation;
+use Cajudev\RestfulApi\Exception\BadRequestException;
+
+class $Validator extends \Cajudev\RestfulApi\Validator
+{
+    /** @Validation(type="string") */
+    public \$property;
+
+    public function validateProperty()
+    {
+        throw new BadRequestException('Bad Request');
+    }
+}
+END;
+}
+
+function directories(string $name)
+{
+    mkdir("$name/public", 0777, true);
+    mkdir("$name/src/Entity", 0777, true);
+    mkdir("$name/src/Repository", 0777, true);
+    mkdir("$name/src/Services", 0777, true);
+    mkdir("$name/src/Validator", 0777, true);
+}
+
+function index(string $name)
+{
+    file_put_contents("$name/public/index.php", <<<END
+<?php
+
+/**
+ * -----------------------------------------------------------------------------
+ * Require Main Configuration
+ * -----------------------------------------------------------------------------
+ */
+require_once __DIR__ . '/../bootstrap.php';
+
+try {
+
+/**
+ * -----------------------------------------------------------------------------
+ * Initialize Application
+ * -----------------------------------------------------------------------------
+ */
+
+    \$router = \Cajudev\RestfulApi\Router::create();
+
+/**
+ * -----------------------------------------------------------------------------
+ * Create Routes
+ * -----------------------------------------------------------------------------
+ *
+ *  GET     /{endpoint}
+ *  GET     /{endpoint}/{id}
+ *  POST    /{endpoint}
+ *  PUT     /{endpoint}/{id}
+ *  DELETE  /{endpoint}/{id}
+ */
+
+    \$router->crud('endpoint', new \App\Services\Service());
+
+/**
+ * -----------------------------------------------------------------------------
+ * Run Application
+ * -----------------------------------------------------------------------------
+ */
+
+    \$router->run();
+} catch (\Exception \$e) {
+    echo \$e->getMessage();
+}
+END);
+}
+
+function bootstrap(string $name)
+{
+    file_put_contents("$name/bootstrap.php", <<<END
+<?php
+
+/**
+ * -----------------------------------------------------------------------------
+ * Require Composer Autoloader
+ * -----------------------------------------------------------------------------
+ */
+require_once __DIR__ . '/vendor/autoload.php';
+
+/**
+ * -----------------------------------------------------------------------------
+ * Register Doctrine Loader
+ * -----------------------------------------------------------------------------
+ */
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
+
+/**
+ * -----------------------------------------------------------------------------
+ * Define Environment Constants
+ * -----------------------------------------------------------------------------
+ */
+define('__ROOT__', __DIR__);
+
+define('__DEV__', true);
+END);
+}
+
+function config(string $name)
+{
+    file_put_contents("$name/config.json", <<<END
+{
+    "database": {
+        "driver": "pdo_mysql",
+        "host": "",
+        "dbname": "",
+        "user": "",
+        "password": "",
+        "charset": "utf8"
+    }
+}      
+END);
+}
+
+function doctrine(string $name)
+{
+    file_put_contents("$name/cli-config.php", <<<END
+<?php
+
+/**
+ * -----------------------------------------------------------------------------
+ * Require Main Configuration
+ * -----------------------------------------------------------------------------
+ */
+require_once __DIR__ . '/bootstrap.php';
+
+/**
+ * -----------------------------------------------------------------------------
+ * Initialize Doctrine Manager
+ * -----------------------------------------------------------------------------
+ */
+\$em = \Cajudev\RestfulApi\EntityManager::getInstance();
+
+/**
+ * -----------------------------------------------------------------------------
+ * Returns CLI Helper
+ * -----------------------------------------------------------------------------
+ */
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(\$em);
+END);
+}
+
+function composer(string $name)
+{
+    file_put_contents("$name/composer.json", <<<END
+{
+    "autoload": {
+        "psr-4": {
+        "App\\\\": "src/"
+        }
+    },
+    "require": {
+        "cajudev/restful-api": "*"
+    }
+}
+END);
+    chdir($name);
+    shell_exec('composer install');
+}
+
+function gitignore(string $name)
+{
+    file_put_contents("$name/.gitignore", <<<END
+.vscode
+/vendor/
+END);
+}
+
+function init($name)
+{
+    directories($name);
+    index($name);
+    bootstrap($name);
+    config($name);
+    doctrine($name);
+    composer($name);
+    gitignore($name);
+    echo 'done';
+};
+
+
+function create($name)
+{
+    $name = strtolower($name);
+    $Name = ucfirst($name);
+
+    file_put_contents("src/Entity/{$Name}.php", entity($Name, $name));
+    file_put_contents("src/Repository/{$Name}.php", repository($Name));
+    file_put_contents("src/Services/{$Name}.php", service($Name));
+    file_put_contents("src/Validator/{$Name}.php", validator($Name));
+
+    echo 'done';
+};
+
+function remove($name)
+{
+    $Name = ucfirst(strtolower($name));
+    array_map('unlink', glob("src/**/{$Name}.php"));
+    echo 'done';
+};
+
+switch ($command[0]) {
+    case 'init': init($command[1]); break;
+    case 'create': create($command[1]); break;
+    case 'remove': remove($command[1]); break;
+    default: echo 'Invalid command. Available commands are: init, create and remove';
+}
