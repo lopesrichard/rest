@@ -82,16 +82,18 @@ END;
 
 function directories(string $name)
 {
-    mkdir("$name/public", 0777, true);
-    mkdir("$name/src/Entity", 0777, true);
-    mkdir("$name/src/Repository", 0777, true);
-    mkdir("$name/src/Services", 0777, true);
-    mkdir("$name/src/Validator", 0777, true);
+    mkdir($name);
+    chdir($name);
+    mkdir('/public', 0777, true);
+    mkdir('/src/Entity', 0777, true);
+    mkdir('/src/Repository', 0777, true);
+    mkdir('/src/Services', 0777, true);
+    mkdir('/src/Validator', 0777, true);
 }
 
-function index(string $name)
+function index()
 {
-    file_put_contents("$name/public/index.php", <<<END
+    file_put_contents('/public/index.php', <<<END
 <?php
 
 /**
@@ -138,9 +140,9 @@ try {
 END);
 }
 
-function bootstrap(string $name)
+function bootstrap()
 {
-    file_put_contents("$name/bootstrap.php", <<<END
+    file_put_contents('bootstrap.php', <<<END
 <?php
 
 /**
@@ -168,9 +170,32 @@ define('__DEV__', true);
 END);
 }
 
-function config(string $name)
+function router()
 {
-    file_put_contents("$name/config.json", <<<END
+    file_put_contents('router.php', <<<END
+<?php
+
+/**
+ * -----------------------------------------------------------------------------
+ * Display All Errors
+ * -----------------------------------------------------------------------------
+ */
+ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+error_reporting(-1);
+
+/**
+ * -----------------------------------------------------------------------------
+ * Start Application 
+ * -----------------------------------------------------------------------------
+ */
+require_once __DIR__ . '/public/index.php';
+END);
+}
+
+function config()
+{
+    file_put_contents('config.json', <<<END
 {
     "database": {
         "driver": "pdo_mysql",
@@ -184,9 +209,9 @@ function config(string $name)
 END);
 }
 
-function doctrine(string $name)
+function doctrine()
 {
-    file_put_contents("$name/cli-config.php", <<<END
+    file_put_contents('cli-config.php', <<<END
 <?php
 
 /**
@@ -212,9 +237,9 @@ return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(\$em);
 END);
 }
 
-function composer(string $name)
+function composer()
 {
-    file_put_contents("$name/composer.json", <<<END
+    file_put_contents('composer.json', <<<END
 {
     "autoload": {
         "psr-4": {
@@ -226,23 +251,28 @@ function composer(string $name)
     }
 }
 END);
-    chdir($name);
     shell_exec('composer install');
 }
 
-function gitignore(string $name)
+function gitignore()
 {
-    file_put_contents("$name/.gitignore", <<<END
+    file_put_contents('.gitignore', <<<END
 .vscode
 /vendor/
 END);
 }
+
+function start()
+{
+    shell_exec('php -S localhost:8000 router.php');
+};
 
 function init($name)
 {
     directories($name);
     index($name);
     bootstrap($name);
+    router();
     config($name);
     doctrine($name);
     composer($name);
@@ -272,6 +302,7 @@ function remove($name)
 };
 
 switch ($command[0]) {
+    case 'start': start(); break;
     case 'init': init($command[1]); break;
     case 'create': create($command[1]); break;
     case 'remove': remove($command[1]); break;
