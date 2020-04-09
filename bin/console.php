@@ -2,7 +2,7 @@
 
 $command = array_slice($argv, 1);
 
-function entity(string $Entity, string $entity)
+function entity(string $Entity)
 {
     return <<<END
 <?php
@@ -13,13 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\\Repository\\$Entity")
- * @ORM\Table(name="$entity")
  */
 class $Entity extends \Cajudev\RestfulApi\Entity
 {
-    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
-    private ?int \$id;
-
     public function toArray(): array
     {
         return [
@@ -70,9 +66,9 @@ use Cajudev\RestfulApi\Exception\BadRequestException;
 class $Validator extends \Cajudev\RestfulApi\Validator
 {
     /** @Validation(type="string") */
-    public string \$property;
+    public string \$example;
 
-    public function validateProperty()
+    public function validateExample()
     {
         throw new BadRequestException('Bad Request');
     }
@@ -279,13 +275,12 @@ function init($name)
 
 function create($name)
 {
-    $name = strtolower($name);
-    $Name = ucfirst($name);
+    $name = ucfirst(strtolower($name));
 
-    file_put_contents("src/Entity/{$Name}.php", entity($Name, $name));
-    file_put_contents("src/Repository/{$Name}.php", repository($Name));
-    file_put_contents("src/Services/{$Name}.php", service($Name));
-    file_put_contents("src/Validator/{$Name}.php", validator($Name));
+    file_put_contents("src/Entity/{$name}.php", entity($name));
+    file_put_contents("src/Repository/{$name}.php", repository($name));
+    file_put_contents("src/Services/{$name}.php", service($name));
+    file_put_contents("src/Validator/{$name}.php", validator($name));
 
     echo 'done';
 };

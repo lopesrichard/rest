@@ -6,17 +6,17 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Category")
- * @ORM\Table(name="category")
  */
 class Category extends \Cajudev\RestfulApi\Entity
 {
-    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
-    private $id = null;
+    /** @ORM\Column(type="string", nullable=false) **/
+    private string $description;
 
     public function toArray(): array
     {
         return [
             'id' => $this->id,
+            'description' => $this->description,
         ];
     }
 }

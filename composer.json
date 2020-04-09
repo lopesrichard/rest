@@ -5,6 +5,6 @@
     }
   },
   "require": {
-    "cajudev/restful-api": "0.0.1"
+    "cajudev/restful-api": "*"
   }
 }

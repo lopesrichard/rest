@@ -1,24 +1,39 @@
 <?php
 
+/**
+ * -----------------------------------------------------------------------------
+ * Require Main Configuration
+ * -----------------------------------------------------------------------------
+ */
 require_once __DIR__ . '/../bootstrap.php';
 
-define('__DEV__', true);
+/**
+ * -----------------------------------------------------------------------------
+ * Initialize Application
+ * -----------------------------------------------------------------------------
+ */
 
-try {
-    $router = \Cajudev\RestfulApi\Router::create();
+$router = \Cajudev\RestfulApi\Router::create();
 
-    /**
-     *  GET     /{endpoint}
-     *  GET     /{endpoint}/{id}
-     *  POST    /{endpoint}
-     *  PUT     /{endpoint}/{id}
-     *  DELETE  /{endpoint}/{id}
-     */
-    
-    $router->crud('customers', new \App\Services\Customer());
-    $router->crud('addresses', new \App\Services\Address());
+/**
+ * -----------------------------------------------------------------------------
+ * Create Routes
+ * -----------------------------------------------------------------------------
+ *
+ *  GET     /{endpoint}
+ *  GET     /{endpoint}/{id}
+ *  POST    /{endpoint}
+ *  PUT     /{endpoint}/{id}
+ *  DELETE  /{endpoint}/{id}
+ */
 
-    $router->run();
-} catch (\Exception $e) {
-    echo $e->getMessage();
-}
+$router->crud('products', new \App\Services\Product());
+$router->crud('colors', new \App\Services\Color());
+
+/**
+ * -----------------------------------------------------------------------------
+ * Run Application
+ * -----------------------------------------------------------------------------
+ */
+
+$router->run();

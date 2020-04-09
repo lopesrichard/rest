@@ -8,10 +8,10 @@ use Cajudev\RestfulApi\Exception\BadRequestException;
 
 class Product extends \Cajudev\RestfulApi\Validator
 {
-    /** @Validation(type="string") */
-    public $property;
+    /** @Validation(type="string", params={ "maxlength": 30 }) */
+    public $name;
 
-    public function validateProperty()
+    public function validateName()
     {
         throw new BadRequestException('Bad Request');
     }
