@@ -84,16 +84,16 @@ function directories(string $name)
 {
     mkdir($name);
     chdir($name);
-    mkdir('/public', 0777, true);
-    mkdir('/src/Entity', 0777, true);
-    mkdir('/src/Repository', 0777, true);
-    mkdir('/src/Services', 0777, true);
-    mkdir('/src/Validator', 0777, true);
+    mkdir('public', 0777, true);
+    mkdir('src/Entity', 0777, true);
+    mkdir('src/Repository', 0777, true);
+    mkdir('src/Services', 0777, true);
+    mkdir('src/Validator', 0777, true);
 }
 
 function index()
 {
-    file_put_contents('/public/index.php', <<<END
+    file_put_contents('public/index.php', <<<END
 <?php
 
 /**
@@ -103,15 +103,13 @@ function index()
  */
 require_once __DIR__ . '/../bootstrap.php';
 
-try {
-
 /**
  * -----------------------------------------------------------------------------
  * Initialize Application
  * -----------------------------------------------------------------------------
  */
 
-    \$router = \Cajudev\RestfulApi\Router::create();
+\$router = \Cajudev\RestfulApi\Router::create();
 
 /**
  * -----------------------------------------------------------------------------
@@ -125,7 +123,7 @@ try {
  *  DELETE  /{endpoint}/{id}
  */
 
-    \$router->crud('endpoint', new \App\Services\Service());
+\$router->crud('endpoint', new \App\Services\Service());
 
 /**
  * -----------------------------------------------------------------------------
@@ -133,10 +131,7 @@ try {
  * -----------------------------------------------------------------------------
  */
 
-    \$router->run();
-} catch (\Exception \$e) {
-    echo \$e->getMessage();
-}
+\$router->run();
 END);
 }
 
@@ -270,13 +265,14 @@ function start()
 function init($name)
 {
     directories($name);
-    index($name);
-    bootstrap($name);
+    index();
+    bootstrap();
     router();
-    config($name);
-    doctrine($name);
-    composer($name);
-    gitignore($name);
+    config();
+    doctrine();
+    composer();
+    gitignore();
+    
     echo 'done';
 };
 
