@@ -2,6 +2,6 @@
 
 namespace App\Repository;
 
-class Category extends \Cajudev\RestfulApi\Repository
+class Category extends \Cajudev\Rest\Repository
 {
 }    

@@ -12,7 +12,7 @@ require_once __DIR__ . '/bootstrap.php';
  * Initialize Doctrine Manager
  * -----------------------------------------------------------------------------
  */
-$em = \Cajudev\RestfulApi\EntityManager::getInstance();
+$em = \Cajudev\Rest\EntityManager::getInstance();
 
 /**
  * -----------------------------------------------------------------------------

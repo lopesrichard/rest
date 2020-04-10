@@ -2,10 +2,10 @@
 
 namespace App\Validator;
 
-use Cajudev\RestfulApi\Validator;
-use Cajudev\RestfulApi\Exception\BadRequestException;
+use Cajudev\Rest\Validator;
+use Cajudev\Rest\Exception\BadRequestException;
 
-class Product extends \Cajudev\RestfulApi\Validator
+class Product extends \Cajudev\Rest\Validator
 {
     // /** @Validation\String */
     public $name;

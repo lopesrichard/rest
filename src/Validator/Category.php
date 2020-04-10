@@ -2,11 +2,11 @@
 
 namespace App\Validator;
 
-use Cajudev\RestfulApi\Validator;
-use Cajudev\RestfulApi\Annotation\Validation;
-use Cajudev\RestfulApi\Exception\BadRequestException;
+use Cajudev\Rest\Validator;
+use Cajudev\Rest\Annotation\Validation;
+use Cajudev\Rest\Exception\BadRequestException;
 
-class Category extends \Cajudev\RestfulApi\Validator
+class Category extends \Cajudev\Rest\Validator
 {
     /** @Validation(type="string") */
     public $property;

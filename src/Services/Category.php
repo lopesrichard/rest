@@ -2,6 +2,6 @@
 
 namespace App\Services;
 
-class Category extends \Cajudev\RestfulApi\Service
+class Category extends \Cajudev\Rest\Service
 {
 }     

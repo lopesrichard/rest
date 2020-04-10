@@ -14,14 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\\Repository\\$Entity")
  */
-class $Entity extends \Cajudev\RestfulApi\Entity
+class $Entity extends \Cajudev\Rest\Entity
 {
-    public function toArray(): array
-    {
-        return [
-            'id' => \$this->id,
-        ];
-    }
 }
 END;
 }
@@ -33,7 +27,7 @@ function repository(string $Repository)
 
 namespace App\Repository;
 
-class $Repository extends \Cajudev\RestfulApi\Repository
+class $Repository extends \Cajudev\Rest\Repository
 {
 }    
 END;
@@ -46,7 +40,7 @@ function service(string $Service)
 
 namespace App\Services;
 
-class $Service extends \Cajudev\RestfulApi\Service
+class $Service extends \Cajudev\Rest\Service
 {
 }     
 END;
@@ -59,11 +53,11 @@ function validator(string $Validator)
 
 namespace App\Validator;
 
-use Cajudev\RestfulApi\Validator;
-use Cajudev\RestfulApi\Annotation\Validation;
-use Cajudev\RestfulApi\Exception\BadRequestException;
+use Cajudev\Rest\Validator;
+use Cajudev\Rest\Annotation\Validation;
+use Cajudev\Rest\Exception\BadRequestException;
 
-class $Validator extends \Cajudev\RestfulApi\Validator
+class $Validator extends \Cajudev\Rest\Validator
 {
     /** @Validation(type="string") */
     public string \$example;
@@ -105,7 +99,7 @@ require_once __DIR__ . '/../bootstrap.php';
  * -----------------------------------------------------------------------------
  */
 
-\$router = \Cajudev\RestfulApi\Router::create();
+\$app = \Cajudev\Rest\App::create();
 
 /**
  * -----------------------------------------------------------------------------
@@ -119,7 +113,7 @@ require_once __DIR__ . '/../bootstrap.php';
  *  DELETE  /{endpoint}/{id}
  */
 
-\$router->crud('endpoint', new \App\Services\Service());
+\$app->crud('endpoint', new \App\Services\Service());
 
 /**
  * -----------------------------------------------------------------------------
@@ -127,7 +121,7 @@ require_once __DIR__ . '/../bootstrap.php';
  * -----------------------------------------------------------------------------
  */
 
-\$router->run();
+\$app->run();
 END);
 }
 
@@ -217,7 +211,7 @@ require_once __DIR__ . '/bootstrap.php';
  * Initialize Doctrine Manager
  * -----------------------------------------------------------------------------
  */
-\$em = \Cajudev\RestfulApi\EntityManager::getInstance();
+\$em = \Cajudev\Rest\EntityManager::getInstance();
 
 /**
  * -----------------------------------------------------------------------------

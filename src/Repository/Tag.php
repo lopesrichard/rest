@@ -2,6 +2,6 @@
 
 namespace App\Repository;
 
-class Tag extends \Cajudev\RestfulApi\Repository
+class Tag extends \Cajudev\Rest\Repository
 {
 }    

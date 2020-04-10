@@ -13,7 +13,7 @@ require_once __DIR__ . '/../bootstrap.php';
  * -----------------------------------------------------------------------------
  */
 
-$router = \Cajudev\RestfulApi\Router::create();
+$app = \Cajudev\Rest\App::create();
 
 /**
  * -----------------------------------------------------------------------------
@@ -27,8 +27,8 @@ $router = \Cajudev\RestfulApi\Router::create();
  *  DELETE  /{endpoint}/{id}
  */
 
-$router->crud('products', new \App\Services\Product());
-$router->crud('colors', new \App\Services\Color());
+$app->crud('products', new \App\Services\Product());
+$app->crud('colors', new \App\Services\Color());
 
 /**
  * -----------------------------------------------------------------------------
@@ -36,4 +36,4 @@ $router->crud('colors', new \App\Services\Color());
  * -----------------------------------------------------------------------------
  */
 
-$router->run();
+$app->run();

@@ -2,6 +2,6 @@
 
 namespace App\Services;
 
-class Product extends \Cajudev\RestfulApi\Service
+class Product extends \Cajudev\Rest\Service
 {
 }     

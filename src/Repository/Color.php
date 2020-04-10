@@ -2,6 +2,6 @@
 
 namespace App\Repository;
 
-class Color extends \Cajudev\RestfulApi\Repository
+class Color extends \Cajudev\Rest\Repository
 {
 }    

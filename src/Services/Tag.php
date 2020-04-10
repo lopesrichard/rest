@@ -2,6 +2,6 @@
 
 namespace App\Services;
 
-class Tag extends \Cajudev\RestfulApi\Service
+class Tag extends \Cajudev\Rest\Service
 {
 }     

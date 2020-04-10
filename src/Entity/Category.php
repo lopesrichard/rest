@@ -4,12 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Cajudev\RestfulApi\Annotation\Payload;
+use Cajudev\Rest\Annotation\Payload;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Category")
  */
-class Category extends \Cajudev\RestfulApi\Entity
+class Category extends \Cajudev\Rest\Entity
 {
     /**
      * @Payload

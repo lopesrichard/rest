@@ -2,7 +2,7 @@
 
 namespace App\Validator\Annotation;
 
-use Cajudev\RestfulApi\Exception\BadRequestException;
+use Cajudev\Rest\Exception\BadRequestException;
 
 class StringValidator
 {

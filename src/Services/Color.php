@@ -2,6 +2,6 @@
 
 namespace App\Services;
 
-class Color extends \Cajudev\RestfulApi\Service
+class Color extends \Cajudev\Rest\Service
 {
 }     

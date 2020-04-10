@@ -2,6 +2,6 @@
 
 namespace App\Repository;
 
-class Product extends \Cajudev\RestfulApi\Repository
+class Product extends \Cajudev\Rest\Repository
 {
 }    

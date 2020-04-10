@@ -1,1 +1,1 @@
-# Restful Api Skeleton
+# Rest Api Skeleton
