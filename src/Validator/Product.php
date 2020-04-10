@@ -2,30 +2,37 @@
 
 namespace App\Validator;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Cajudev\Rest\Validator;
+use Cajudev\Rest\Annotations\Validations;
 use Cajudev\Rest\Exceptions\BadRequestException;
 
 class Product extends \Cajudev\Rest\Validator
 {
-    // /** @Validation\String */
+    /**
+     * @Validations\Strings(maxlength=255, required=true)
+     */
     public $name;
 
-    // /** @Validation\String */
+    /**
+     * @Validations\Strings(maxlength=255, required=true)
+     */
     public $description;
 
-    // /**
-    //  * @Validation\Any<Integer, String, Object>
-    //  */
+    /**
+     * @Validations\Mixed(types={"integer", "string", "object"}, required=true)
+     */
     public $category;
 
-    // /**
-    //  * @Validation\Array<Integer, String, Object>)
-    //  */
+    /**
+     * @Validations\Arrays(types={"integer", "string", "object"}, required=true)
+     */
     public $tags;
 
-    // /**
-    //  * @Validation\Array<Integer, String, Object>)
-    //  */
+    /**
+     * @Validations\Arrays(types={"integer", "string", "object"}, required=true)
+     */
     public $colors;
 
     public function validateCategory()
@@ -46,17 +53,13 @@ class Product extends \Cajudev\Rest\Validator
             return $this->category = new \App\Entity\Category(['description' => $this->category]);
         }
 
-        if (is_object($this->category)) {
-            if (isset($this->category->id)) {
-                if (!($category = $repository->find($this->category->id))) {
-                    throw new BadRequestException("Categoria [{$this->category->id}] não encontrada");
-                }
-                return $this->category = $category;
+        if (isset($this->category->id)) {
+            if (!($category = $repository->find($this->category->id))) {
+                throw new BadRequestException("Categoria [{$this->category->id}] não encontrada");
             }
-            return $this->category = new \App\Entity\Category($this->category);
+            return $this->category = $category;
         }
-
-        throw new BadRequestException('Parâmetro [category] informado é inválido');
+        return $this->category = new \App\Entity\Category($this->category);
     }
 
     public function validateTags()
@@ -65,7 +68,7 @@ class Product extends \Cajudev\Rest\Validator
             throw new BadRequestException('Parâmetro [tags] informado é inválido');
         }
 
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection($this->tags);
+        $this->tags = new ArrayCollection($this->tags);
 
         foreach ($this->tags as $key => $tag) {
             $this->tags[$key] = $this->validateTag($tag);
@@ -90,17 +93,13 @@ class Product extends \Cajudev\Rest\Validator
             return new \App\Entity\Tag(['description' => $tag]);
         }
 
-        if (is_object($tag)) {
-            if (isset($tag->id)) {
-                if (!($result = $repository->findOneBy(['id' => $tag->id, 'product' => $this->id]))) {
-                    throw new BadRequestException("Categoria [{$tag->id}] não encontrada");
-                }
-                return $result;
+        if (isset($tag->id)) {
+            if (!($result = $repository->findOneBy(['id' => $tag->id, 'product' => $this->id]))) {
+                throw new BadRequestException("Categoria [{$tag->id}] não encontrada");
             }
-            return new \App\Entity\Tag($tag);
+            return $result;
         }
-
-        throw new BadRequestException('Parâmetro [tag] informado é inválido');
+        return new \App\Entity\Tag($tag);
     }
 
     public function validateColors()
@@ -109,7 +108,7 @@ class Product extends \Cajudev\Rest\Validator
             throw new BadRequestException('Parâmetro [colors] informado é inválido');
         }
 
-        $this->colors = new \Doctrine\Common\Collections\ArrayCollection($this->colors);
+        $this->colors = new ArrayCollection($this->colors);
 
         foreach ($this->colors as $key => $color) {
             $this->colors[$key] = $this->validateColor($color);
@@ -134,16 +133,12 @@ class Product extends \Cajudev\Rest\Validator
             return new \App\Entity\Color(['description' => $color]);
         }
 
-        if (is_object($color)) {
-            if (isset($color->id)) {
-                if (!($result = $repository->find($color->id))) {
-                    throw new BadRequestException("Categoria [{$color->id}] não encontrada");
-                }
-                return $result;
+        if (isset($color->id)) {
+            if (!($result = $repository->find($color->id))) {
+                throw new BadRequestException("Categoria [{$color->id}] não encontrada");
             }
-            return new \App\Entity\Color($color);
+            return $result;
         }
-
-        throw new BadRequestException('Parâmetro [color] informado é inválido');
+        return new \App\Entity\Color($color);
     }
 }
