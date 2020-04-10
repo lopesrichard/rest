@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Cajudev\Rest\Annotation\Payload;
+use Cajudev\Rest\Annotations\Payload;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Color")

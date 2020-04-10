@@ -3,8 +3,8 @@
 namespace App\Validator;
 
 use Cajudev\Rest\Validator;
-use Cajudev\Rest\Annotation\Validation;
-use Cajudev\Rest\Exception\BadRequestException;
+use Cajudev\Rest\Annotations\Validation;
+use Cajudev\Rest\Exceptions\BadRequestException;
 
 class Category extends \Cajudev\Rest\Validator
 {
