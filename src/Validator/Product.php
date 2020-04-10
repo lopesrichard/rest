@@ -3,7 +3,7 @@
 namespace App\Validator;
 
 use Cajudev\Rest\Validator;
-use Cajudev\Rest\Exception\BadRequestException;
+use Cajudev\Rest\Exceptions\BadRequestException;
 
 class Product extends \Cajudev\Rest\Validator
 {
@@ -77,14 +77,14 @@ class Product extends \Cajudev\Rest\Validator
         $repository = $this->em->getRepository(\App\Entity\Tag::class);
 
         if (is_int($tag)) {
-            if (!($result = $repository->find($tag))) {
-                throw new BadRequestException("Categoria [{$tag}] não encontrada");
+            if (!($result = $repository->findOneBy(['id' => $tag, 'product' => $this->id]))) {
+                throw new BadRequestException("Tag [{$tag}] não encontrada");
             }
             return $result;
         }
 
         if (is_string($tag)) {
-            if ($result = $repository->findOneByDescription($tag)) {
+            if ($result = $repository->findOneBy(['description' => $tag, 'product' => $this->id])) {
                 return $tag = $result;
             }
             return new \App\Entity\Tag(['description' => $tag]);
@@ -92,7 +92,7 @@ class Product extends \Cajudev\Rest\Validator
 
         if (is_object($tag)) {
             if (isset($tag->id)) {
-                if (!($result = $repository->find($tag->id))) {
+                if (!($result = $repository->findOneBy(['id' => $tag->id, 'product' => $this->id]))) {
                     throw new BadRequestException("Categoria [{$tag->id}] não encontrada");
                 }
                 return $result;
