@@ -4,12 +4,18 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Cajudev\RestfulApi\Annotation\Payload;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Tag")
  */
 class Tag extends \Cajudev\RestfulApi\Entity
 {
-    /** @ORM\Column(type="string") **/
+    /**
+     * @Payload
+     * 
+     * @ORM\Column(type="string")
+     */
     private string $description;
 
     /**
@@ -17,12 +23,4 @@ class Tag extends \Cajudev\RestfulApi\Entity
      * @ORM\JoinColumn(nullable=false)
      */
     private Product $product;
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'description' => $this->description,
-        ];
-    }
 }
