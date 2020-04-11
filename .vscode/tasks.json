@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Destroy Database",
+      "type": "shell",
+      "command": "php bin/console destroy",
+      "windows": { "command": "php .\\bin\\console destroy" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Create New Feature",
+      "type": "shell",
+      "command": "php bin/console create ${input:name}",
+      "windows": { "command": "php .\\bin\\console create ${input:name}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Remove Feature",
+      "type": "shell",
+      "command": "php bin/console remove ${input:name}",
+      "windows": { "command": "php .\\bin\\console remove ${input:name}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Migrate Database",
+      "type": "shell",
+      "command": "php bin/console migrate",
+      "windows": { "command": "php .\\bin\\console migrate" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Project",
+      "type": "shell",
+      "command": "php bin/console start",
+      "windows": { "command": "php .\\bin\\console start" },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "name",
+      "description": "Nome:",
+      "type": "promptString"
+    }
+  ]
+}
