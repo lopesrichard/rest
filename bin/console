@@ -327,7 +327,7 @@ function migrate() {
 }
 
 function destroy() {
-    execute('vendor/bin/doctrine orm:schema-tool:drop --force');
+    execute('vendor/bin/doctrine orm:schema-tool:drop --force --full-database');
 }
 
 switch ($command[0]) {
