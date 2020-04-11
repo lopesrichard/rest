@@ -322,7 +322,7 @@ function remove($name)
 };
 
 function migrate() {
-    execute('vendor/bin/doctrine-migrations migrations:generate');
+    execute('vendor/bin/doctrine-migrations migrations:diff');
     execute('vendor/bin/doctrine-migrations migrations:migrate --no-interaction');
 }
 
