@@ -2,27 +2,51 @@
 
 $command = array_slice($argv, 1);
 
+function separator(string $string) {
+    return str_replace('/', DIRECTORY_SEPARATOR, $string);
+}
+
+function execute(string $command) {
+    echo shell_exec(separator($command));
+}
+
+function save($directory, $content) {
+    file_put_contents(separator($directory), $content);
+}
+
 function entity(string $Entity)
 {
-    return <<<END
+    save("src/Entity/{$Entity}.php", <<<END
 <?php
 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+
+use Cajudev\Rest\Annotations\Query;
+use Cajudev\Rest\Annotations\Payload;
 
 /**
  * @ORM\Entity(repositoryClass="App\\Repository\\$Entity")
  */
 class $Entity extends \Cajudev\Rest\Entity
 {
+    /**
+     * @Payload
+     * 
+     * @Query(sortable=true, searchable=true)
+     * 
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private string \$foo;
 }
-END;
+END);
 }
 
 function repository(string $Repository)
 {
-    return <<<END
+    save("src/Repository/{$Repository}.php", <<<END
 <?php
 
 namespace App\Repository;
@@ -30,12 +54,12 @@ namespace App\Repository;
 class $Repository extends \Cajudev\Rest\Repository
 {
 }    
-END;
+END);
 }
 
 function service(string $Service)
 {
-    return <<<END
+    save("src/Services/{$Service}.php", <<<END
 <?php
 
 namespace App\Services;
@@ -43,47 +67,51 @@ namespace App\Services;
 class $Service extends \Cajudev\Rest\Service
 {
 }     
-END;
+END);
 }
 
 function validator(string $Validator)
 {
-    return <<<END
+    save("src/Validator/{$Validator}.php", <<<END
 <?php
 
 namespace App\Validator;
 
-use Cajudev\Rest\Validator;
-use Cajudev\Rest\Annotations\Validation;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Cajudev\Rest\Annotations\Validations;
 use Cajudev\Rest\Exceptions\BadRequestException;
 
 class $Validator extends \Cajudev\Rest\Validator
 {
-    /** @Validation(type="string") */
-    public string \$example;
+    /**
+     * @Validations\Strings(maxlength=255, required=true)
+     */
+    public string \$foo;
 
-    public function validateExample()
+    public function validateFoo()
     {
-        throw new BadRequestException('Bad Request');
+        throw new BadRequestException('Foo invalid');
     }
 }
-END;
+END);
 }
 
 function directories(string $name)
 {
     mkdir($name);
     chdir($name);
-    mkdir('public', 0777, true);
-    mkdir('src/Entity', 0777, true);
-    mkdir('src/Repository', 0777, true);
-    mkdir('src/Services', 0777, true);
-    mkdir('src/Validator', 0777, true);
+    mkdir(separator('public'), 0777, true);
+    mkdir(separator('src/Entity'), 0777, true);
+    mkdir(separator('src/Repository'), 0777, true);
+    mkdir(separator('src/Services'), 0777, true);
+    mkdir(separator('src/Validator'), 0777, true);
+    mkdir(separator('src/Migrations'), 0777, true);
 }
 
 function index()
 {
-    file_put_contents('public/index.php', <<<END
+    save('public/index.php', <<<END
 <?php
 
 /**
@@ -127,7 +155,7 @@ END);
 
 function bootstrap()
 {
-    file_put_contents('bootstrap.php', <<<END
+    save('bootstrap.php', <<<END
 <?php
 
 /**
@@ -157,7 +185,7 @@ END);
 
 function router()
 {
-    file_put_contents('router.php', <<<END
+    save('router.php', <<<END
 <?php
 
 /**
@@ -180,7 +208,7 @@ END);
 
 function config()
 {
-    file_put_contents('config.json', <<<END
+    save('config.json', <<<END
 {
     "database": {
         "driver": "pdo_mysql",
@@ -196,7 +224,7 @@ END);
 
 function doctrine()
 {
-    file_put_contents('cli-config.php', <<<END
+    save('cli-config.php', <<<END
 <?php
 
 /**
@@ -220,11 +248,18 @@ require_once __DIR__ . '/bootstrap.php';
  */
 return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(\$em);
 END);
+
+    save('migrations.json', <<<END
+{
+  "migrations_namespace": "App\\Migrations",
+  "migrations_directory": "src/Migrations"
+}
+END);
 }
 
 function composer()
 {
-    file_put_contents('composer.json', <<<END
+    save('composer.json', <<<END
 {
     "autoload": {
         "psr-4": {
@@ -236,12 +271,12 @@ function composer()
     }
 }
 END);
-    shell_exec('composer install');
+    execute('composer install');
 }
 
 function gitignore()
 {
-    file_put_contents('.gitignore', <<<END
+    save('.gitignore', <<<END
 .vscode
 /vendor/
 END);
@@ -249,7 +284,7 @@ END);
 
 function start()
 {
-    shell_exec('php -S localhost:8000 router.php');
+    execute('php -S localhost:8000 router.php');
 };
 
 function init($name)
@@ -271,10 +306,10 @@ function create($name)
 {
     $name = ucfirst(strtolower($name));
 
-    file_put_contents("src/Entity/{$name}.php", entity($name));
-    file_put_contents("src/Repository/{$name}.php", repository($name));
-    file_put_contents("src/Services/{$name}.php", service($name));
-    file_put_contents("src/Validator/{$name}.php", validator($name));
+    entity($name);
+    repository($name);
+    service($name);
+    validator($name);
 
     echo 'done';
 };
@@ -282,14 +317,25 @@ function create($name)
 function remove($name)
 {
     $Name = ucfirst(strtolower($name));
-    array_map('unlink', glob("src/**/{$Name}.php"));
+    array_map('unlink', glob(separator("src/**/{$Name}.php")));
     echo 'done';
 };
+
+function migrate() {
+    execute('vendor/bin/doctrine-migrations migrations:generate');
+    execute('vendor/bin/doctrine-migrations migrations:migrate --no-interaction');
+}
+
+function destroy() {
+    execute('vendor/bin/doctrine orm:schema-tool:drop --force');
+}
 
 switch ($command[0]) {
     case 'start': start(); break;
     case 'init': init($command[1]); break;
     case 'create': create($command[1]); break;
     case 'remove': remove($command[1]); break;
+    case 'migrate': migrate(); break;
+    case 'destroy': destroy(); break;
     default: echo 'Invalid command. Available commands are: init, create and remove';
 }

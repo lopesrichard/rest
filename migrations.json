@@ -1,0 +1,4 @@
+{
+  "migrations_namespace": "App\\Migrations",
+  "migrations_directory": "src/Migrations"
+}
