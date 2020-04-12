@@ -32,7 +32,7 @@ class Product extends \Cajudev\Rest\Entity
     private string $description;
 
     /**
-     * @Payload(format="d/m/Y")
+     * @Payload(format="ISO8601")
      * 
      * @ORM\Column(type="datetime", nullable=false)
      */
