@@ -28,6 +28,8 @@ $app = \Cajudev\Rest\App::create();
  */
 
 $app->crud('products', new \App\Services\Product());
+$app->crud('categories', new \App\Services\Category());
+$app->crud('tags', new \App\Services\Tag());
 $app->crud('colors', new \App\Services\Color());
 
 /**
