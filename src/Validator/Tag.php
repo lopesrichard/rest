@@ -4,6 +4,7 @@ namespace App\Validator;
 
 use Cajudev\Rest\Validator;
 use Cajudev\Rest\Annotations\Validations;
+use Cajudev\Rest\Factories\RepositoryFactory;
 use Cajudev\Rest\Exceptions\BadRequestException;
 
 class Tag extends \Cajudev\Rest\Validator
@@ -14,21 +15,7 @@ class Tag extends \Cajudev\Rest\Validator
     public $description;
 
     /**
-     * @Validations\Strings(maxlength=255)
+     * @Validations\Entity(owner="tag", target="color", field="description", exclusive=false, required=false)
      */
     public $color = 'default';
-
-    public function validateColor()
-    {
-        $repository = $this->em->getRepository(\App\Entity\Color::class);
-
-        if ($color = $repository->findOneByDescription($this->color)) {
-            return $this->color = $color;
-        }
-
-        $validator = new \App\Validator\Color(['description' => $this->color]);
-        $validator->validate(Validator::INSERT);
-
-        $this->color = new \App\Entity\Color($validator->payload());
-    }
 }
