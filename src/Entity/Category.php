@@ -17,4 +17,12 @@ class Category extends \Cajudev\Rest\Entity
      * @ORM\Column(type="string", nullable=false)
      */
     private string $description;
+
+    /**
+     * @Payload(properties={"description", "parent"})
+     * 
+     * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private ?Category $parent;
 }
