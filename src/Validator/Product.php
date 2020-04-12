@@ -4,6 +4,7 @@ namespace App\Validator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Cajudev\Rest\Validator;
 use Cajudev\Rest\Annotations\Validations;
 use Cajudev\Rest\Exceptions\BadRequestException;
 
@@ -30,7 +31,7 @@ class Product extends \Cajudev\Rest\Validator
     public $tags;
 
     /**
-     * @Validations\Arrays(types={"integer", "string", "object"}, required=true)
+     * @Validations\Arrays(types={"integer", "string"}, required=true)
      */
     public $colors;
 
@@ -49,7 +50,11 @@ class Product extends \Cajudev\Rest\Validator
             if ($category = $repository->findOneByDescription($this->category)) {
                 return $this->category = $category;
             }
-            return $this->category = new \App\Entity\Category(['description' => $this->category]);
+
+            $validator = new \App\Validator\Category(['description' => $category]);
+            $validator->validate(Validator::INSERT);
+    
+            return $this->category = new \App\Entity\Category($validator->payload());
         }
 
         if (isset($this->category->id)) {
@@ -58,7 +63,11 @@ class Product extends \Cajudev\Rest\Validator
             }
             return $this->category = $category;
         }
-        return $this->category = new \App\Entity\Category($this->category);
+
+        $validator = new \App\Validator\Category($category);
+        $validator->validate(Validator::INSERT);
+
+        return $this->category = new \App\Entity\Category($validator->payload());
     }
 
     public function validateTags()
@@ -87,9 +96,13 @@ class Product extends \Cajudev\Rest\Validator
 
         if (is_string($tag)) {
             if ($result = $repository->findOneBy(['description' => $tag, 'product' => $this->id])) {
-                return $tag = $result;
+                return $result;
             }
-            return new \App\Entity\Tag(['description' => $tag]);
+
+            $validator = new \App\Validator\Tag(['description' => $tag]);
+            $validator->validate(Validator::INSERT);
+
+            return new \App\Entity\Tag($validator->payload());
         }
 
         if (isset($tag->id)) {
@@ -98,7 +111,11 @@ class Product extends \Cajudev\Rest\Validator
             }
             return $result;
         }
-        return new \App\Entity\Tag($tag);
+        
+        $validator = new \App\Validator\Tag($tag);
+        $validator->validate(Validator::INSERT);
+
+        return new \App\Entity\Tag($validator->payload());
     }
 
     public function validateColors()
@@ -125,19 +142,13 @@ class Product extends \Cajudev\Rest\Validator
             return $result;
         }
 
-        if (is_string($color)) {
-            if ($result = $repository->findOneByDescription($color)) {
-                return $color = $result;
-            }
-            return new \App\Entity\Color(['description' => $color]);
+        if ($result = $repository->findOneByDescription($color)) {
+            return $color = $result;
         }
 
-        if (isset($color->id)) {
-            if (!($result = $repository->find($color->id))) {
-                throw new BadRequestException("Categoria [{$color->id}] não encontrada");
-            }
-            return $result;
-        }
-        return new \App\Entity\Color($color);
+        $validator = new \App\Validator\Color($color);
+        $validator->validate(Validator::INSERT);
+
+        return new \App\Entity\Color($validator->payload());
     }
 }

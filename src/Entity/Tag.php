@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 use Cajudev\Rest\Annotations\Payload;
 
@@ -23,4 +24,12 @@ class Tag extends \Cajudev\Rest\Entity
      * @ORM\JoinColumn(nullable=false)
      */
     private Product $product;
+
+    /**
+     * @Payload(property="description")
+     * 
+     * @ORM\ManyToOne(targetEntity="Color", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Color $color;
 }
