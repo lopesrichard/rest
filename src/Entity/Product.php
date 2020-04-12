@@ -32,7 +32,7 @@ class Product extends \Cajudev\Rest\Entity
     private string $description;
 
     /**
-     * @Payload(property="description")
+     * @Payload(properties={"description", "parent"})
      * 
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
@@ -40,7 +40,7 @@ class Product extends \Cajudev\Rest\Entity
     private Category $category;
 
     /**
-     * @Payload(property="description")
+     * @Payload(properties={"description", "color": {"description"}})
      * 
      * @ORM\OneToMany(targetEntity="Tag", mappedBy="product", cascade={"persist"}, orphanRemoval=true)
      */
