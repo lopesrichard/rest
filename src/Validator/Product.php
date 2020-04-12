@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Cajudev\Rest\Validator;
 use Cajudev\Rest\Annotations\Validations;
-use Cajudev\Rest\Exceptions\BadRequestException;
+use Cajudev\Rest\Exceptions\Http\BadRequestException;
 
 class Product extends \Cajudev\Rest\Validator
 {

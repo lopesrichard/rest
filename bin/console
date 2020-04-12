@@ -80,7 +80,7 @@ namespace App\Validator;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Cajudev\Rest\Annotations\Validations;
-use Cajudev\Rest\Exceptions\BadRequestException;
+use Cajudev\Rest\Exceptions\Http\BadRequestException;
 
 class $Validator extends \Cajudev\Rest\Validator
 {
