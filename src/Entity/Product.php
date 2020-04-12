@@ -32,6 +32,13 @@ class Product extends \Cajudev\Rest\Entity
     private string $description;
 
     /**
+     * @Payload(format="d/m/Y")
+     * 
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private \DateTime $expiration;
+
+    /**
      * @Payload(properties={"description", "parent"})
      * 
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})

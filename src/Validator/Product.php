@@ -21,6 +21,11 @@ class Product extends \Cajudev\Rest\Validator
     public $description;
 
     /**
+     * @Validations\DateTime(format="ISO8601")
+     */
+    public $expiration;
+
+    /**
      * @Validations\Entity(owner="product", target="category", field="description", exclusive=false, required=true)
      */
     public $category;
