@@ -26,6 +26,11 @@ class Product extends \Cajudev\Rest\Validator
     public $expiration;
 
     /**
+     * @Validations\Boolean
+     */
+    public $active;
+
+    /**
      * @Validations\Entity(owner="product", target="category", field="description", exclusive=false, required=true)
      */
     public $category;
