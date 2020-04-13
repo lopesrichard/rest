@@ -22,6 +22,7 @@ $app = \Cajudev\Rest\App::create();
  *
  *  GET     /{endpoint}
  *  GET     /{endpoint}/{id}
+ *  GET     /{endpoint}/options
  *  POST    /{endpoint}
  *  PUT     /{endpoint}/{id}
  *  DELETE  /{endpoint}/{id}
