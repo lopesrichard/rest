@@ -14,7 +14,7 @@ use Cajudev\Rest\Annotations\Payload;
 class Product extends \Cajudev\Rest\Entity
 {
     /**
-     * @Payload(context={"default", "options"})
+     * @Payload(context={"default", "list", "options"})
      * 
      * @Query(sortable=true, searchable=true)
      * 
@@ -23,7 +23,7 @@ class Product extends \Cajudev\Rest\Entity
     private string $name;
 
     /**
-     * @Payload(context={"default"})
+     * @Payload(context={"default", "list"})
      * 
      * @Query(sortable=true, searchable=true)
      * 
@@ -40,6 +40,7 @@ class Product extends \Cajudev\Rest\Entity
 
     /**
      * @Payload(context={"default"}, properties={"description", "parent"})
+     * @Payload(context={"list"}, properties={"description"})
      * 
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
