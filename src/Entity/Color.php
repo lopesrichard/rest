@@ -12,7 +12,7 @@ use Cajudev\Rest\Annotations\Payload;
 class Color extends \Cajudev\Rest\Entity
 {
     /**
-     * @Payload
+     * @Payload(context={"default", "options"})
      * 
      * @ORM\Column(type="string", nullable=false)
      */

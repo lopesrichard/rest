@@ -12,14 +12,14 @@ use Cajudev\Rest\Annotations\Payload;
 class Category extends \Cajudev\Rest\Entity
 {
     /**
-     * @Payload
+     * @Payload(context={"default", "options"})
      * 
      * @ORM\Column(type="string", nullable=false)
      */
     private string $description;
 
     /**
-     * @Payload(properties={"description", "parent"})
+     * @Payload(context={"default"}, properties={"description", "parent"})
      * 
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)

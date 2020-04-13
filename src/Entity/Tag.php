@@ -13,7 +13,7 @@ use Cajudev\Rest\Annotations\Payload;
 class Tag extends \Cajudev\Rest\Entity
 {
     /**
-     * @Payload
+     * @Payload(context={"default", "options"})
      * 
      * @ORM\Column(type="string")
      */
@@ -26,7 +26,7 @@ class Tag extends \Cajudev\Rest\Entity
     private Product $product;
 
     /**
-     * @Payload(property="description")
+     * @Payload(context={"default"}, property="description")
      * 
      * @ORM\ManyToOne(targetEntity="Color", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)

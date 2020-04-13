@@ -14,7 +14,7 @@ use Cajudev\Rest\Annotations\Payload;
 class Product extends \Cajudev\Rest\Entity
 {
     /**
-     * @Payload
+     * @Payload(context={"default", "options"})
      * 
      * @Query(sortable=true, searchable=true)
      * 
@@ -23,7 +23,7 @@ class Product extends \Cajudev\Rest\Entity
     private string $name;
 
     /**
-     * @Payload
+     * @Payload(context={"default"})
      * 
      * @Query(sortable=true, searchable=true)
      * 
@@ -32,14 +32,14 @@ class Product extends \Cajudev\Rest\Entity
     private string $description;
 
     /**
-     * @Payload(format="ISO8601")
+     * @Payload(context={"default"}, format="ISO8601")
      * 
      * @ORM\Column(type="datetime", nullable=false)
      */
     private \DateTime $expiration;
 
     /**
-     * @Payload(properties={"description", "parent"})
+     * @Payload(context={"default"}, properties={"description", "parent"})
      * 
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
@@ -47,14 +47,14 @@ class Product extends \Cajudev\Rest\Entity
     private Category $category;
 
     /**
-     * @Payload(properties={"description", "color": {"description"}})
+     * @Payload(context={"default"}, properties={"description", "color": {"description"}})
      * 
      * @ORM\OneToMany(targetEntity="Tag", mappedBy="product", cascade={"persist"}, orphanRemoval=true)
      */
     private Collection $tags;
 
     /**
-     * @Payload(property="description")
+     * @Payload(context={"default"}, property="description")
      * 
      * @ORM\ManyToMany(targetEntity="Color", cascade={"persist"})
      */
